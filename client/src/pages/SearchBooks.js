@@ -1,5 +1,9 @@
 // TODO: Use the Apollo useMutation() Hook to execute the SAVE_BOOK mutation in the handleSaveBook() function instead of the saveBook() function imported from the API file.
-// Make sure you keep the logic for saving the book's ID to state in the try...catch block!
+// TODO: Define and export the `SAVE_BOOK` mutation in a new file at `/client/src/utils/mutations.js`.
+// TODO: Make sure you keep the logic for saving the book's ID to state in the try...catch block!
+
+import { useMutation } from "@apollo/client";
+import { SAVE_BOOK } from "../utils/mutations";
 
 import React, { useState, useEffect } from "react";
 import {
@@ -13,7 +17,7 @@ import {
 } from "react-bootstrap";
 
 import Auth from "../utils/auth";
-import { saveBook, searchGoogleBooks } from "../utils/API";
+import { searchGoogleBooks } from "../utils/API";
 import { saveBookIds, getSavedBookIds } from "../utils/localStorage";
 
 const SearchBooks = () => {
@@ -24,6 +28,8 @@ const SearchBooks = () => {
 
 	// create state to hold saved bookId values
 	const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
+
+	const [saveBook, { error }] = useMutation(SAVE_BOOK);
 
 	// set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
 	// learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
