@@ -1,50 +1,44 @@
-// TODO:  Define the necessary Query and Mutation types:
-
-// import the gql tagged template function
 const { gql } = require("apollo-server-express");
 
-// create typeDefs
 const typeDefs = gql`
-	type Query {
-		me: User
-	}
-
-	type Mutation {
-		login(email: String!, password: String!): Auth
-		addUser(username: String!, email: String!, password: String!): Auth
-		saveBook(
-			authors: [String]
-			description: String
-			title: String
-			bookId: String
-			image: String
-			link: String
-		): User
-		removeBook(bookId: String!): User
-	}
-
 	type User {
-		_id: ID!
+		_id: ID
 		username: String
 		email: String
-		bookCount: Int
-		savedBooks: [Book]
+		characterCount: Int
+		savedCharacters: [Character]
 	}
 
-	type Book {
-		bookId: String
-		authors: [String]
+	type Character {
+		characterId: ID
+		name: String
 		description: String
-		title: String
 		image: String
-		link: String
+		series: String
 	}
 
 	type Auth {
 		token: ID!
 		user: User
 	}
+
+	type Query {
+		me: User
+		characters: [Character]
+	}
+
+	type Mutation {
+		login(email: String!, password: String!): Auth
+		addUser(username: String!, email: String!, password: String!): Auth
+		saveCharacter(
+			name: String!
+			characterId: String!
+			image: String!
+			description: String!
+			series: String
+		): User
+		removeCharacter(characterId: ID!): User
+	}
 `;
 
-// export the typeDefs
 module.exports = typeDefs;
