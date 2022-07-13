@@ -1,10 +1,10 @@
 const faker = require("faker");
 
 const db = require("../config/connection");
-const { User } = require("../models");
+const { User, Character } = require("../models");
 
 db.once("open", async () => {
-	await Thought.deleteMany({});
+	await Character.deleteMany({});
 	await User.deleteMany({});
 
 	// create user data
@@ -20,37 +20,47 @@ db.once("open", async () => {
 
 	const createdUsers = await User.collection.insertMany(userData);
 
-	// create friends
+	// create characters
 	// for (let i = 0; i < 100; i += 1) {
-	//   const randomUserIndex = Math.floor(Math.random() * createdUsers.ops.length);
-	//   const { _id: userId } = createdUsers.ops[randomUserIndex];
+	// 	const randomUserIndex = Math.floor(Math.random() * createdUsers.ops.length);
+	// 	const { _id: userId } = createdUsers.ops[randomUserIndex];
 
-	//   let friendId = userId;
+	// 	let friendId = userId;
 
-	//   while (friendId === userId) {
-	//     const randomUserIndex = Math.floor(Math.random() * createdUsers.ops.length);
-	//     friendId = createdUsers.ops[randomUserIndex];
-	//   }
+	// 	while (friendId === userId) {
+	// 		const randomUserIndex = Math.floor(
+	// 			Math.random() * createdUsers.ops.length
+	// 		);
+	// 		friendId = createdUsers.ops[randomUserIndex];
+	// 	}
 
-	//   await User.updateOne({ _id: userId }, { $addToSet: { friends: friendId } });
+	// 	await User.updateOne(
+	// 		{ _id: userId },
+	// 		{ $addToSet: { characters: friendId } }
+	// 	);
 	// }
 
-	// create thoughts
-	// let createdThoughts = [];
-	// for (let i = 0; i < 100; i += 1) {
-	//   const thoughtText = faker.lorem.words(Math.round(Math.random() * 20) + 1);
+	// create characters
+	let characterArray = [];
 
-	//   const randomUserIndex = Math.floor(Math.random() * createdUsers.ops.length);
-	//   const { username, _id: userId } = createdUsers.ops[randomUserIndex];
+	for (let i = 0; i < 50; i += 1) {
+		const name = faker.internet.userName();
+		const description = faker.internet.email(username);
+		const characterId = faker.internet.password();
 
-	//   const createdThought = await Thought.create({ thoughtText, username });
+		characterArray.push({ name, description, email });
+	}
 
-	//   const updatedUser = await User.updateOne(
-	//     { _id: userId },
-	//     { $push: { thoughts: createdThought._id } }
-	//   );
+	const selectedCharacter = await Character.collection.insertMany(
+		characterArray
+	);
 
-	//   createdThoughts.push(createdThought);
+	const updatedUser = await User.updateOne(
+		{ _id: userId },
+		{ $push: { characters: characterArray._id } }
+	);
+
+	characterArray.push(selectedCharacter);
 	// }
 
 	// create reactions
@@ -60,7 +70,7 @@ db.once("open", async () => {
 	//   const randomUserIndex = Math.floor(Math.random() * createdUsers.ops.length);
 	//   const { username } = createdUsers.ops[randomUserIndex];
 
-	//   const randomThoughtIndex = Math.floor(Math.random() * createdThoughts.length);
+	//   const randomThoughtIndex = Math.floor(Math.random() * characterData.length);
 	//   const { _id: thoughtId } = createdThoughts[randomThoughtIndex];
 
 	//   await Thought.updateOne(
